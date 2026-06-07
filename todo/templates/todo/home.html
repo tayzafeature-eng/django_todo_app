@@ -44,9 +44,9 @@
                             {% for task in tasks %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    {% if task.category.name == 'Work' %}
+                                    {% if task.category == 'Work' %}
                                         <span class="badge bg-danger me-2">💼 Work</span>
-                                    {% elif task.category.name == 'Study' %}
+                                    {% elif task.category == 'Study' %}
                                         <span class="badge bg-warning text-dark me-2">📚 Study</span>
                                     {% else %}
                                         <span class="badge bg-info text-dark me-2">🏠 Personal</span>

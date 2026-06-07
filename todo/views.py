@@ -6,32 +6,26 @@ def home(request):
     # 1. User က website ကနေ Submit နှိပ်ပြီး data အသစ် ပို့လိုက်ရင်
     if request.method == "POST":
         text_form_website = request.POST.get('task_text')
-        category_id_from_website = request.POST.get('task_category') # push ID from HTML
+        category_form_website = request.POST.get('task_category') # push ID from HTML
 
         if text_form_website:
-            # Safe Logic: ID ရှိရင် database ထဲမှာ ရှာမယ်၊ ရှာမတွေ့ရင် မထမဆုံး category ကို ယူမယ်
-            try:
-                selected_category = Category.object.get(id=category_id_from_website)
-            except (Category.DoesNotExist, ValueError):
-                #category ထဲမှာ data မရှိသေးရင် personal ကို ပြမယ်
-                selected_category, create = Category.objects.get_or_create(name='Personal')
+            # category က none ဖြစ်နေရင် personal လို့ပုံသေသတ်မှတ်မယ်
+            if not category_form_website:
+                category_form_website = 'Personal'
 
-            # Database ထဲကို အသစ်သွားဆောက်(သိမ်း) logic
-            Task.object.create(
+            Task.objects.create(
                 text=text_form_website,
-                category=selected_category # html string/ID အဟုတ်ဘဲ category object ကို ထည့်ပေးလိုက်တာ
+                category=category_form_website
             )
+
             return redirect('home')
         
-        # ရိုးရိုးတန်းတန်း website ထဲဝင်လာရင် (GET Request)ရှိသမျှ task တွေပြမယ်
         all_tasks = Task.objects.all()
-        all_categories = Category.objects.all()
 
         context = {
-            'tasks': all_tasks,
-            'categories': all_categories
+            'tasks': all_tasks
         }
-
+        
         return render(request, 'todo/home.html', context)
         
 # for delete logic
