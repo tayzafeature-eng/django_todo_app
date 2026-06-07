@@ -2,24 +2,21 @@
 const searchInput = document.getElementById('searchInput');
 
 if (searchInput) {
-    searchInput.addEventListener('input', function () {
+    searchInput.addEventListener('input', function(){
+        const filterValue = searchInput.value.toLowerCase();
+        // HTML ထဲမှာ Django ပတ်ပေးထားတဲ့ <li> tag တွေကို လှမ်းဖမ်းတာပါ
+        const listItem = document.querySelectorAll('#myList li');
 
-        const filterValue = this.value.toLowerCase();
-
-        const listItems = document.querySelectorAll('#myList li');
-
-        listItems.forEach(item => {
-
-            const taskText = item.textContent.toLowerCase();
+        listItem.forEach(item => {
+            // task စာသားတည်ရှိရာ span ကို ရှာတာပါ
+            const taskText = item.querySelector('span:not(.badge)').textContent.toLowerCase();
 
             if (taskText.includes(filterValue)) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
+                item.style.setProperty('display', 'flex', 'important');
+            }else {
+                item.style.setProperty('display', 'none', 'important');
             }
-
         });
-
     });
 }
 
