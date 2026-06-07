@@ -5,11 +5,11 @@ if (searchInput) {
     searchInput.addEventListener('input', function(){
         const filterValue = searchInput.value.toLowerCase();
         // HTML ထဲမှာ Django ပတ်ပေးထားတဲ့ <li> tag တွေကို လှမ်းဖမ်းတာပါ
-        const listItem = document.querySelectorAll('#myList li');
+        const listItem = document.querySelectorAll('#myList li').length;
 
         listItem.forEach(item => {
             // task စာသားတည်ရှိရာ span ကို ရှာတာပါ
-            const taskText = item.querySelector('span:not(.badge)').textContent.toLowerCase();
+            const taskText = item.querySelector('.task-text').textContent.toLowerCase();
 
             if (taskText.includes(filterValue)) {
                 item.style.setProperty('display', 'flex', 'important');
