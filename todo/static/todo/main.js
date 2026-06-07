@@ -9,7 +9,11 @@ if (searchInput) {
 
         listItem.forEach(item => {
             // task စာသားတည်ရှိရာ span ကို ရှာတာပါ
-            const taskText = item.querySelector('.task-text').textContent.toLowerCase();
+            const textElement = item.querySelector('.fs-5');
+
+            if (!textElement) return;
+
+            const taskText = textElement.textContent.toLowerCase();
 
             if (taskText.includes(filterValue)) {
                 item.style.setProperty('display', 'flex', 'important');
