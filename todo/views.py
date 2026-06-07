@@ -1,39 +1,44 @@
-from django.shortcuts import render, redirect, get_object_or_404 #redirect ကိုပါ import ထည့်ရမယ်
-from .models import Task, Category # အပေါ်ဆုံးမှာ task model ကို အရင် import လုပ်ပေးရပါမယ်
-
+from django.shortcuts import render, redirect
+from .models import Task, Category
 
 def home(request):
-    # 1. User က website ကနေ Submit နှိပ်ပြီး data အသစ် ပို့လိုက်ရင်
     if request.method == "POST":
         text_form_website = request.POST.get('task_text')
-        category_id_from_website = request.POST.get('task_category') # push ID from HTML
-
+        category_id_from_website = request.POST.get('task_category')
+        
         if text_form_website:
-            # Safe Logic: ID ရှိရင် database ထဲမှာ ရှာမယ်၊ ရှာမတွေ့ရင် မထမဆုံး category ကို ယူမယ်
-            try:
-                selected_category = Category.object.get(id=category_id_from_website)
-            except (Category.DoesNotExist, ValueError):
-                #category ထဲမှာ data မရှိသေးရင် personal ကို ပြမယ်
-                selected_category, create = Category.objects.get_or_create(name='Personal')
-
-            # Database ထဲကို အသစ်သွားဆောက်(သိမ်း) logic
-            Task.object.create(
+            # 🌟 အလွန်ရိုးရှင်းပြီး လုံခြုံတဲ့ နည်းလမ်းဖြင့် စစ်ဆေးခြင်း
+            # Form က ID ပို့လိုက်ပြီး အဲ့ဒီ ID က ကိန်းဂဏန်းအစစ်ဖြစ်ရင်
+            if category_id_from_website and category_id_from_website.isdigit():
+                try:
+                    selected_category = Category.objects.get(id=int(category_id_from_website))
+                except:
+                    # ဒေတာဘေ့စ်ထဲမှာ ရှာမတွေ့ရင် ပထမဆုံး Category ကို အလိုအလျောက် ယူမယ်
+                    selected_category = Category.objects.first()
+            else:
+                # ID မပါလာရင် ပထမဆုံး Category ကို ယူမယ်
+                selected_category = Category.objects.first()
+            
+            # အကယ်၍ Database ထဲမှာ Category လုံးဝမရှိသေးရင် Default တစ်ခု အတင်းဆောက်မယ်
+            if not selected_category:
+                selected_category = Category.objects.create(name='Personal')
+            
+            # Task ကို အောင်မြင်စွာ သိမ်းဆည်းခြင်း
+            Task.objects.create(
                 text=text_form_website,
-                category=selected_category # html string/ID အဟုတ်ဘဲ category object ကို ထည့်ပေးလိုက်တာ
+                category=selected_category
             )
             return redirect('home')
-        
-        # ရိုးရိုးတန်းတန်း website ထဲဝင်လာရင် (GET Request)ရှိသမျှ task တွေပြမယ်
-        all_tasks = Task.objects.all()
-        all_categories = Category.objects.all()
+            
+    # Website ပေါ်မှာ Task တွေ ပြန်ပြဖို့ ဆွဲထုတ်ခြင်း
+    all_tasks = Task.objects.all()
+    
+    context = {
+        'tasks': all_tasks
+    }
+    return render(request, 'todo/home.html', context)
 
-        context = {
-            'tasks': all_tasks,
-            'categories': all_categories
-        }
 
-        return render(request, 'todo/home.html', context)
-        
 # for delete logic
 def delete_task(request, task_id):
     # search database same Task form URL
