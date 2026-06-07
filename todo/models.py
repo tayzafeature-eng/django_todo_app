@@ -11,6 +11,6 @@ class Task(models.Model):
     # Category အမျိုးအစားကိုလည်း စာသားအနေနဲ့ အများဆုံး စာလုံးရေ ၁၀၀ သိမ်းမယ်
     category = models.CharField(max_length=100, default='Personal')
 
-# ဒါကတော့ Database ထဲမှာ ကြည့်လိုက်ရင် Task ရဲ့ နာမည်ကို စာသားအတိုင်း လှလှပပ မြင်ရအောင် လိုပ်တာပါ
-def __str__(self):
-    return self.text
+    # ဒါကတော့ Database ထဲမှာ ကြည့်လိုက်ရင် Task ရဲ့ နာမည်ကို စာသားအတိုင်း လှလှပပ မြင်ရအောင် လိုပ်တာပါ
+    def __str__(self):
+        return self.text
