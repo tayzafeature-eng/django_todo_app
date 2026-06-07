@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404 #redirect ကိုပါ import ထည့်ရမယ်
-from .models import Task, Category # အပေါ်ဆုံးမှာ task model ကို အရင် import လုပ်ပေးရပါမယ်
+from .models import Task # အပေါ်ဆုံးမှာ task model ကို အရင် import လုပ်ပေးရပါမယ်
 
 
 def home(request):
@@ -18,15 +18,15 @@ def home(request):
                 category=category_form_website
             )
 
-            return redirect('home')
+        return redirect('home')
         
-        all_tasks = Task.objects.all()
+    all_tasks = Task.objects.all()
 
-        context = {
-            'tasks': all_tasks
-        }
+    context = {
+        'tasks': all_tasks
+    }
         
-        return render(request, 'todo/home.html', context)
+    return render(request, 'todo/home.html', context)
         
 # for delete logic
 def delete_task(request, task_id):
