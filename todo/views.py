@@ -9,8 +9,12 @@ def home(request):
         category_id_from_website = request.POST.get('task_category') # push ID from HTML
 
         if text_form_website:
-            # ပို့လိုက်တဲ့ ID နဲ့ category Object အစစ်ကို Database မှာ ရှာတယ်
-            selected_category = get_object_or_404(Category, id=category_id_from_website)
+            # Safe Logic: ID ရှိရင် database ထဲမှာ ရှာမယ်၊ ရှာမတွေ့ရင် မထမဆုံး category ကို ယူမယ်
+            try:
+                selected_category = Category.object.get(id=category_id_from_website)
+            except (Category.DoesNotExist, ValueError):
+                #category ထဲမှာ data မရှိသေးရင် personal ကို ပြမယ်
+                selected_category, create = Category.objects.get_or_create(name='Personal')
 
             # Database ထဲကို အသစ်သွားဆောက်(သိမ်း) logic
             Task.object.create(
@@ -21,9 +25,11 @@ def home(request):
         
         # ရိုးရိုးတန်းတန်း website ထဲဝင်လာရင် (GET Request)ရှိသမျှ task တွေပြမယ်
         all_tasks = Task.objects.all()
+        all_categories = Category.objects.all()
 
         context = {
-            'tasks': all_tasks
+            'tasks': all_tasks,
+            'categories': all_categories
         }
 
         return render(request, 'todo/home.html', context)
