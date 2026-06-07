@@ -21,8 +21,6 @@ if (searchInput) {
 }
 
 function filterCategory(category, button) {
-
-    console.log("Selected Category:", category);
     // ၁။ Button တွေကို Active လဲပေးတဲ့အပိုင်း (မင်းရဲ့မူရင်းကုဒ်)
     document.querySelectorAll('.d-flex .btn').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
