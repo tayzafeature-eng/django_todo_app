@@ -20,29 +20,27 @@ if (searchInput) {
     });
 }
 
-// 2. Filter by Category (အမျိုးအစားအလိုက် ခွဲခြားကြည့်တဲ့စနစ်) အတွက် logic
-function filterCategory(category, button){
-    // Active ဖြစ်နေတဲ့ Button အရောင်တွေကို လဲပေးတာ
-    document.querySelectorAll('.mb-3 .btn').forEach(btn => btn.classList.remove('active'));
+function filterCategory(category, button) {
+    // ၁။ Button တွေကို Active လဲပေးတဲ့အပိုင်း (မင်းရဲ့မူရင်းကုဒ်)
+    document.querySelectorAll('.d-flex .btn').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
 
-    // Website ပေါ်က task တွေကို filter ပတ်ပြတဲ့ အပိုင်း
+    // ၂။ Website ပေါ်က task တွေကို filter ပတ်ပြတဲ့အပိုင်း (မင်းရဲ့မူရင်းကုဒ်)
     const tasks = document.querySelectorAll('.list-group-item');
     tasks.forEach(task => {
-        if(category === 'All' || task.getAttribute('data-category') === category) {
+        if (category === 'All' || task.getAttribute('data-category') === category) {
             task.style.display = 'flex';
         } else {
             task.style.display = 'none';
         }
     });
 
-    // backend ဆီ category အမှန်ရောက်အောင်ပို့မယ်
-    // user က all ကို နှိပ်ထားရင် default အနေနဲ့ 'personal' ကို သတ်မှတ်ထားမယ်
+    // 🌟 ၃။ views.py ကိုမပြင်ဘဲ Backend ဆီ Category အမှန်ရောက်အောင် ပို့ပေးမည့် နေရာ
+    // အကယ်၍ User က '⭐ All' ခလုတ်ကို နှိပ်ထားရင် Default အနေနဲ့ 'Personal' လို့ သတ်မှတ်ပေးလိုက်မယ်
     if (category === 'All') {
         document.getElementById('selectedCategory').value = 'Personal';
     } else {
-        // work or study ကို နှိပ်ရင် form ထည်း ထည့်ပေးလိုက်မယ်
+        // 'Work' သို့မဟုတ် 'Study' သို့မဟုတ် 'Personal' နှိပ်ရင် အဲ့ဒီစာသားအတိုင်း Form ထဲ ထည့်ပေးလိုက်မယ်
         document.getElementById('selectedCategory').value = category;
     }
-
 }
