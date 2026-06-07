@@ -26,24 +26,23 @@ function filterCategory(category, button){
     document.querySelectorAll('.mb-3 .btn').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
 
-    // (ဒါက !) နိုပ်လိုက်တဲ့ Category စာသားကို html က လျှို့ဝှက် အကွက်ထဲ လှမ်းထည့်လိုက်တာ
-    // တကယ်လို့ 'all' ကို နိုပ်ထားရင် default အနေနဲ့ 'personal' လို့ သတ်မှတ်ပေးလိုက်မယ်
-    const backendCategory = (category == 'All') ? 'Personal' :category;
-    document.getElementById('selectedCategory').value = backendCategory;
-
-    const listItem = document.querySelectorAll('#myList li');
-
-    listItem.forEach(item =>{
-        // <li> ထဲမှာ ရှိတဲ့ badge ရဲ့ စာသားကို ယူတာ(ဉပမာ - work ဆိုရင် 'work' လို့ ယူမယ်)
-        const badgeElement = item.querySelector('.badge');
-        const itemCategory = badgeElement ? badgeElement.textContent.toLowerCase() : '';
-
-        if (category === 'All') {
-            item.style.setProperty('display', 'flex', 'important');
-        } else if (itemCategory.includes(category.toLowerCase())) {
-            item.style.setProperty('display', 'flex', 'important');
+    // Website ပေါ်က task တွေကို filter ပတ်ပြတဲ့ အပိုင်း
+    const tasks = document.querySelectorAll('.list-group-item');
+    tasks.forEach(task => {
+        if(category === 'All' || task.getAttribute('data-category') === category) {
+            task.style.display = 'flex';
         } else {
-            item.style.setProperty('display', 'none', 'important');
+            task.style.display = 'none';
         }
     });
+
+    // backend ဆီ category အမှန်ရောက်အောင်ပို့မယ်
+    // user က all ကို နှိပ်ထားရင် default အနေနဲ့ 'personal' ကို သတ်မှတ်ထားမယ်
+    if (category === 'All') {
+        document.getElementById('selectedCategory').value = 'Personal';
+    } else {
+        // work or study ကို နှိပ်ရင် form ထည်း ထည့်ပေးလိုက်မယ်
+        document.getElementById('selectedCategory').value = category;
+    }
+
 }
