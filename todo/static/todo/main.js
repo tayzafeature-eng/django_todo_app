@@ -3,7 +3,7 @@ const searchInput = document.getElementById('searchInput');
 
 if (searchInput) {
     searchInput.addEventListener('input', function(){
-        const filterValue = searchInput.ariaValueMax.toLowerCase();
+        const filterValue = searchInput.value.toLowerCase();
         // HTML ထဲမှာ Django ပတ်ပေးထားတဲ့ <li> tag တွေကို လှမ်းဖမ်းတာပါ
         const listItem = document.querySelectorAll('#myList li');
 
