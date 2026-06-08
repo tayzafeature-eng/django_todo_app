@@ -48,3 +48,23 @@ function filterCategory(category, button) {
         document.getElementById('selectedCategory').value = category;
     }
 }
+
+// HTML Form ကို javascript က လှမ်းဖမ်းတာ
+const todoForm = document.getElementById('todoForm');
+
+todoForm.addEventListener('submit', function(event){
+    // Form နှိပ်လိုက်ရင် website ကြီး Reload မဖြစ်အောင် တာဆီး
+    event.preventDefault();
+
+    // Input Box ထဲက စားသားကို ဆွဲယူတယ်
+    const taskText = document.getElementById('taskInput').value;
+    // Hidden Input ထဲက ရွှေးထားတဲ့ category ကို ဆွဲယူတယ်
+    const taskCategory = document.getElementById('selectedCategory').value;
+
+    console.log("အိုကေတယ် ! Website လည်း Reload မဖြစ်တော့ဘူး။ ရလာတဲ့ ဒေတာတွေကတော့ -");
+    console.log("Task Name:", taskText);
+    console.log("Category:", taskCategory);
+
+    // ဖြည့်ပြီးရင် input Box ကို စာပြန်ဖျက်ပေး
+    document.getElementById('taskInput').vlue = '';
+})

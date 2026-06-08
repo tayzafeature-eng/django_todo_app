@@ -29,7 +29,7 @@
                             <input id="searchInput" class="form-control" placeholder="🔍 Search tasks...">
                         </div>
 
-                        <form method="POST" action="">
+                        <form id="todoForm">
                             {% csrf_token %}
                             
                             <input type="hidden" id="selectedCategory" name="task_category" value="Personal">
