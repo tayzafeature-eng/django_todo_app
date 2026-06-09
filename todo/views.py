@@ -1,33 +1,48 @@
+import json 
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404 #redirect ကိုပါ import ထည့်ရမယ်
-from .models import Task # အပေါ်ဆုံးမှာ task model ကို အရင် import လုပ်ပေးရပါမယ်
+from .models import Task 
 
 
 def home(request):
-    # 1. User က website ကနေ Submit နှိပ်ပြီး data အသစ် ပို့လိုက်ရင်
+    # Javascript Fetch က ပို့လိုက်တဲ့ post request ကို ဖမ်းမယ့်အပိုင်း
     if request.method == "POST":
-        text_form_website = request.POST.get('task_text')
-        category_form_website = request.POST.get('task_category') # push ID from HTML
+        # JavaScript က ပို့လိုက်တဲ့ JSON formant ဒေတာကို ဖတ်ယူခြင်း
+        try:
+            data = json.loads(request.body)
+            text_form_website = data.get('task_text')
+            category_form_website = data.get('task_category')
+
+        except json.JSONDecodeError:
+            # ရိုးရိုး Form သုံးတားသေးရင် အဟောင်းအတိုင်း ဖတ်မယ်
+            text_form_website = request.POST.get('task_text')
+            category_form_website = request.POST.get('task_category')
 
         if text_form_website:
-            # category က none ဖြစ်နေရင် personal လို့ပုံသေသတ်မှတ်မယ်
             if not category_form_website:
                 category_form_website = 'Personal'
 
-            Task.objects.create(
+            # Database ထဲသွားသိမ်းမယ်
+            new_task = Task.objects.create(
                 text=text_form_website,
                 category=category_form_website
             )
 
-        return redirect('home')
+            # Reload မလုပ်တော့ ဘဲ Javascript ဆီအောင်မြင်ကြောင်းပို့မယ်
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Task created successfully!',
+                'task_text': new_task.text,
+                'task_category': new_task.category
+            })
         
+    #GET Request အတွက် မူရင်းအတိုင်းပဲ 
     all_tasks = Task.objects.all()
-
     context = {
         'tasks': all_tasks
     }
-        
     return render(request, 'todo/home.html', context)
-        
+    
 # for delete logic
 def delete_task(request, task_id):
     # search database same Task form URL

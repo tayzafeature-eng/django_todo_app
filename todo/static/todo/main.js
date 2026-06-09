@@ -61,10 +61,35 @@ todoForm.addEventListener('submit', function(event){
     // Hidden Input ထဲက ရွှေးထားတဲ့ category ကို ဆွဲယူတယ်
     const taskCategory = document.getElementById('selectedCategory').value;
 
-    console.log("အိုကေတယ် ! Website လည်း Reload မဖြစ်တော့ဘူး။ ရလာတဲ့ ဒေတာတွေကတော့ -");
-    console.log("Task Name:", taskText);
-    console.log("Category:", taskCategory);
+    // Django ရဲ့ CSRF Tokenကို HTML ကနေ ဖမ်းထား(လုံခြံုရေးအတွက်)
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // ဖြည့်ပြီးရင် input Box ကို စာပြန်ဖျက်ပေး
-    document.getElementById('taskInput').vlue = '';
-})
+    // Fetch API စတင် အလုပ်လုပ်ပြီ
+    // '/home/' နေရာမှာ မိမိရဲ့ URL  သတ်မှတ်ချက်အတိုင်း ပြင်နိုင်
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken // Django ဆီ CSRF Token လှမ်းပေးလိုက်တာ
+        },
+        // ဒေတာတွေကို စာသား (JSON String)ပြောင်းပြိး ပို့မယ်
+        body: JSON.stringify({
+            'task_text': taskText,
+            'task_category': taskCategory
+        })
+    })
+    .then(response => response.json())// ဆာဗာက ပြန်ပေးတဲ့ JSON ဒေတာကို ဖတ်မယ်
+    .then(data => {
+        console.log("ဆာဗာဆီက အကြောင်းပြန်ချက် ရပါပြီ -");
+        console.log(data); // views.py => url
+
+        if (data.status === 'success'){
+            alert("ဒေတာဘေ့စ်ထဲအထိ ရောက်သွားပြီဗျု့! Message: " + data.message);
+            // အောင်မြင်ရင် input Box ကို စာပြန်ဖျက်မယ်
+            document.getElementById('taskInput').value = '';
+        }
+    })
+    .catch(error => {
+        console.error("အိုင်ယား ... တစ်နေရာရာမှာ လွဲသွားပြီ -", error);
+    });
+});
