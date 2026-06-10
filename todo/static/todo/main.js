@@ -108,13 +108,13 @@ todoForm.addEventListener('submit', function(event){
             <div class="d-flex align-items-center w-100">
                 ${badgeHTML}
                 <div class="d-flex align-items-center">
-                    <a href="/complete_task/${data.task_id}" class="text-decoration-none">
+                    <a href="/complete/${data.task_id}" class="text-decoration-none">
                         <span class="me-2 text-muted">⭕</span>
                     </a>
                     <span class="fs-5">${data.task_text}</span>
                 </div>
             </div>
-            <a href="/delete_task/${data.task_id}">
+            <a href="/delete/${data.task_id}">
                 <button class="btn btn-sm btn-danger">❌</button>
             </a>
         `;
