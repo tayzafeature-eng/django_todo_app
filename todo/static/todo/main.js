@@ -80,8 +80,6 @@ todoForm.addEventListener('submit', function(event){
     })
     .then(response => response.json())// ဆာဗာက ပြန်ပေးတဲ့ JSON ဒေတာကို ဖတ်မယ်
     .then(data => {
-        // ALERT နေရာမှာ အောက်က ကုဒ်တွေနဲ့ အစားထိုးလိုက်တာပါ
-
         // ၁။ HTML နေရာဟောင်း <ul id='taskList"> ကိုလှမ်းဖမ်းတယ်
         const taskList = document.getElementById('taskList');
 
@@ -110,11 +108,15 @@ todoForm.addEventListener('submit', function(event){
             <div class="d-flex align-items-center w-100">
                 ${badgeHTML}
                 <div class="d-flex align-items-center">
-                    <span class="me-2 text-muted">⭕</span>
+                    <a href="/complete_task/${data.task_id}" class="text-decoration-none">
+                        <span class="me-2 text-muted">⭕</span>
+                    </a>
                     <span class="fs-5">${data.task_text}</span>
                 </div>
             </div>
-            <button class="btn btn-sm btn-danger" onclick="window.location.reload()">❌</button>
+            <a href="/delete_task/${data.task_id}">
+                <button class="btn btn-sm btn-danger">❌</button>
+            </a>
         `;
 
         // ၆။ <li> အသစ်ကြီးကို <ul> ထဲ ပစ်ထည့်လိုက်ပြီ

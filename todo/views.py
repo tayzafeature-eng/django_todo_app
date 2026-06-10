@@ -32,6 +32,7 @@ def home(request):
             return JsonResponse({
                 'status': 'success',
                 'message': 'Task created successfully!',
+                'task_id': new_task.id,
                 'task_text': new_task.text,
                 'task_category': new_task.category
             })
