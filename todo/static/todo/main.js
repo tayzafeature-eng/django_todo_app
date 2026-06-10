@@ -80,14 +80,48 @@ todoForm.addEventListener('submit', function(event){
     })
     .then(response => response.json())// ဆာဗာက ပြန်ပေးတဲ့ JSON ဒေတာကို ဖတ်မယ်
     .then(data => {
-        console.log("ဆာဗာဆီက အကြောင်းပြန်ချက် ရပါပြီ -");
-        console.log(data); // views.py => url
+        // ALERT နေရာမှာ အောက်က ကုဒ်တွေနဲ့ အစားထိုးလိုက်တာပါ
 
-        if (data.status === 'success'){
-            alert("ဒေတာဘေ့စ်ထဲအထိ ရောက်သွားပြီဗျု့! Message: " + data.message);
-            // အောင်မြင်ရင် input Box ကို စာပြန်ဖျက်မယ်
-            document.getElementById('taskInput').value = '';
+        // ၁။ HTML နေရာဟောင်း <ul id='taskList"> ကိုလှမ်းဖမ်းတယ်
+        const taskList = document.getElementById('taskList');
+
+        // ၂။ ဘာ task မှ မရှိသေးပါ ဆိုတဲ့ စာသားရှိနေရင် ဖျက်ထုတ်ပစ်မယ်
+        if (taskList.children.length === 1 && taskList.children[0].textContent.includes('ဘာ task မှ မရှိသေးပါ')) {
+            taskList.innerHTML = '';
         }
+
+        // ၃။ <li> tag အသစ်တစ်ခုကို javascript နဲ့ ဆောက်တယ်
+        const newLi = document.createElement('li');
+        newLi.className = 'list-group-item d-flex justify-content-between align-items-center';
+        newLi.setAttribute('data-category', data.task_category); // Filter လုပ်လို့ရအောင်
+
+        // 4။ Category အလိုက် badge အရောင်ခွဲခြားတဲ့ အပိုင်း
+        let badgeHTML = '';
+        if (data.task_category === 'Work') {
+            badgeHTML = `<span class="badge bg-danger me-2">💼 Work</span>`
+        } else if (data.task_category === 'Study') {
+            badgeHTML = `<span class="badge bg-warning text-dark me-2">📚 Study</span>`
+        } else {
+            badgeHTML = `<span class="badge bg-info text-dark me2">🏠 Personal</span>`
+        }
+
+        // ၅။ မူရင်း HTML structure အတိုင်း <li> ထဲကို ကုဒ်တွေအရှင်ထည့်တာ
+        newLi.innerHTML = `
+            <div class="d-flex align-items-center w-100">
+                ${badgeHTML}
+                <div class="d-flex align-items-center">
+                    <span class="me-2 text-muted">⭕</span>
+                    <span class="fs-5">${data.task_text}</span>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-danger" onclick="window.location.reload()">❌</button>
+        `;
+
+        // ၆။ <li> အသစ်ကြီးကို <ul> ထဲ ပစ်ထည့်လိုက်ပြီ
+        taskList.appendChild(newLi);
+
+        // ၇။ ပြိးသွားရင် Input Box ကို စာပြန်ဖျက်ပေးမယ်
+        document.getElementById('taskInput').value = '';
     })
     .catch(error => {
         console.error("အိုင်ယား ... တစ်နေရာရာမှာ လွဲသွားပြီ -", error);
