@@ -114,9 +114,8 @@ todoForm.addEventListener('submit', function(event){
                     <span class="fs-5">${data.task_text}</span>
                 </div>
             </div>
-            <a href="/delete/${data.task_id}">
-                <button class="btn btn-sm btn-danger">❌</button>
-            </a>
+            
+            <button class="btn btn-sm btn-danger delete-btn" data-id="${data.task_id}">❌</button>
         `;
 
         // ၆။ <li> အသစ်ကြီးကို <ul> ထဲ ပစ်ထည့်လိုက်ပြီ
@@ -128,4 +127,41 @@ todoForm.addEventListener('submit', function(event){
     .catch(error => {
         console.error("အိုင်ယား ... တစ်နေရာရာမှာ လွဲသွားပြီ -", error);
     });
+});
+
+const taskListContainer = document.getElementById('taskList');
+
+taskListContainer.addEventListener('click', function(event){
+    // နှိပ်လိုက်တဲ့ အရာက (delete-btn) ဖြစ်သလားလို့ စစ်တာ
+    if(event.target.classList.contains('delete-btn')){
+        const button = event.target;
+        const taskId = button.getAttribute('data-id'); // Task ID ကို ဆွဲယူတယ်
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        // တကယ်ဖျက်မှာ သေခြာလို့လားလို့ မေးတာ
+        if (confirm("ဒီ task ကို တကယ် ဖျက်မှာလား?")){
+            // Django ဆီကို ဖြတ်လမ်းကနေ POST request နဲ့ လှမ်းဖျက်ခိုင်းတာ
+            fetch(`/delete/${taskId}`, {
+                method: 'POST',
+                headers:{
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    //မျက်စိရှေ့က <li> tag တစ်ခုလုံးကို ရှာပြီး auto ဖျက်ထုတ်ပစ်တာ
+                    const liToDestory = button.closest('li');
+                    liToDestory.remove();
+
+                    // အကယ်၍ Task တွေအကုန်ကုန်သွားရင် "ဘာ task မှ မရှိသေးပါ" စာသားပြန်ပြပေး
+                    const remainingTasks = document.getElementById('taskList');
+                    if (remainingTasks.children.length === 0) {
+                        remainingTasks.innerHTML = '<li class="list-group-item text-center text-muted">ဘာ task မှမရှိသေးပါ</li>';
+                    }
+                }
+            })
+            .catch(error => console.error("ဖျက်တာ လွဲသွားတယ်ဗျာ -", error));
+        }
+    }
 });

@@ -45,14 +45,19 @@ def home(request):
     return render(request, 'todo/home.html', context)
     
 # for delete logic
-def delete_task(request, task_id):
-    # search database same Task form URL
-    task = get_object_or_404(Task, id=task_id)
+def delete_task(request, pk):
+    task = get_object_or_404(Task, id=pk)
 
-    # delete,if search Database 
+    if request.method == "POST":
+        task.delete()
+        # ရိုးရိုး redirect နေရာမှာ javascript  ဆီအောင်မြင်ကြောင်း သတင်းပို့လိုက်တာ
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Task deleted successfylly!'
+        })
+    
+    # အကယ်၍ GET request နဲ့ လာရင်တော့ မူရင်းအတိုင်း ဖျက်ပြီး redirect လုပ်ပေးထားမယ်
     task.delete()
-
-    # website (redirect) after delete
     return redirect('home')
 
 # for change Task logic
