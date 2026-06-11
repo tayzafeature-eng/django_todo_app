@@ -141,7 +141,7 @@ taskListContainer.addEventListener('click', function(event){
         // တကယ်ဖျက်မှာ သေခြာလို့လားလို့ မေးတာ
         if (confirm("ဒီ task ကို တကယ် ဖျက်မှာလား?")){
             // Django ဆီကို ဖြတ်လမ်းကနေ POST request နဲ့ လှမ်းဖျက်ခိုင်းတာ
-            fetch(`/delete/${taskId}`, {
+            fetch(`/delete/${taskId}/`, {
                 method: 'POST',
                 headers:{
                     'X-CSRFToken': csrfToken
