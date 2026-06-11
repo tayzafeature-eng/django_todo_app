@@ -2,6 +2,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404 #redirect ကိုပါ import ထည့်ရမယ်
 from .models import Task 
+from django.views.decorators.csrf import csrf_exempt # လိုအပ်ရင်သုံးဖို့
 
 
 def home(request):
