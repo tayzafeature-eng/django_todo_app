@@ -177,7 +177,7 @@ taskListContainer.addEventListener('click', function(event){
         const taskTextSpan = liElement.querySelector('.task-text');
 
         // မင်းရဲ့ urls.py က paths အတိုင်း အနောက်မှာ / ပါအောင် 'complete_task' လမ်းကြောင်းဆီ ပို့မယ်
-        fetch(`/complete_task/${taskId}/`, {
+        fetch(`/complete/${taskId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrfToken
