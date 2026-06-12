@@ -56,14 +56,15 @@
                                     <div class="d-flex align-items-center">
                                         <button class="btn btn-link p-0 text-decoration-none complete-btn" data-id="{{ task.id }}">
                                             {% if task.completed %}
-                                                <span class="me-2 text-success">✅</span> {% else %}
-                                                <span class="me-2 text-muted">⭕</span> {% endif %}
+                                                <span class="status-icon me-2 text-success">✅</span> 
+                                            {% else %}
+                                                <span class="status-icon me-2 text-muted">⭕</span>
+                                            {% endif %}
                                         </button>
-                                        {% if task.completed %}
-                                            <span class="text-decoration-line-through text-muted fs-5">{{ task.text }}</span>
-                                        {% else %}
-                                            <span class="fs-5 task-text">{{ task.text }}</span>
-                                        {% endif %}
+                                        
+                                        <span class="fs-5 task-text {% if task.completed %}text-decoration-line-through text-muted{% endif %}">
+                                            {{ task.text }}
+                                        </span>
                                     </div>
 
                                 </div>
