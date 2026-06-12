@@ -164,4 +164,41 @@ taskListContainer.addEventListener('click', function(event){
             .catch(error => console.error("ဖျက်တာ လွဲသွားတယ်ဗျာ -", error));
         }
     }
+
+    // နှိပ်လိုက်တဲ့အရာက Completed Button ဖြစ်သလားလို့ စစ်တာ
+    // (button ကို နှိပ်မိတာပဲဖြစ်ဖြစ်၊ အထဲက icon ကို နှိပ်မိတာပဲဖြစ်ဖြစ် အလုပ်လုပ်အောင် .closest() သုံးထားတယ်)
+    const completeBtn = event.target.closest('.complete-btn')
+
+    if (completeBtn) {
+        const taskId = completeBtn.getAttribute('data-id');
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const liElement = completeBtn.closest('li');
+        const statusIcon =completeBtn.querySelector('.status-icon');
+        const taskTextSpan = liElement.querySelector('.task-text');
+
+        // မင်းရဲ့ urls.py က paths အတိုင်း အနောက်မှာ / ပါအောင် 'complete_task' လမ်းကြောင်းဆီ ပို့မယ်
+        fetch(`/complete_task/${taskId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (data.is_completed) {
+                    // True ဖြစ်သွားရင် ✅ ပြောင်းမယ်၊ စာသားကို မျဉ်းတားပြီး အရောင်မှိန်မယ်
+                    statusIcon.textContent = '✅';
+                    statusIcon.className = 'status-icon me-2 text-success';
+                    taskTextSpan.classList.add('text-decoration-line-through', 'text-muted');
+                } else {
+                    // False ပြန်ဖြစ်ရင်း ⭕ ပြောင်းမယ်၊ မျဉ်းတားတာ ဖြုတ်မယ်
+                    statusIcon.textContent = '⭕';
+                    statusIcon.className = 'status-icon me-2 text-muted';
+                    taskTextSpan.classList.remove('text-decoration-line-through', 'text-muted');
+                }
+            }
+        })
+        .catch(error => console.error("Status ပြောင်းထာ လွှဲသွားတယ်ဗျာ -", error));
+    }
 });

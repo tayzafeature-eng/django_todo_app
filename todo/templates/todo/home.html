@@ -54,15 +54,15 @@
                                     {% endif %}
 
                                     <div class="d-flex align-items-center">
-                                        <a href="{% url 'complete_task' task.id %}" class="text-decoration-none">
+                                        <button class="btn btn-link p-0 text-decoration-none complete-btn" data-id="{{ task.id }}">
                                             {% if task.completed %}
                                                 <span class="me-2 text-success">✅</span> {% else %}
                                                 <span class="me-2 text-muted">⭕</span> {% endif %}
-                                        </a>
+                                        </button>
                                         {% if task.completed %}
                                             <span class="text-decoration-line-through text-muted fs-5">{{ task.text }}</span>
                                         {% else %}
-                                            <span class="fs-5">{{ task.text }}</span>
+                                            <span class="fs-5 task-text">{{ task.text }}</span>
                                         {% endif %}
                                     </div>
 

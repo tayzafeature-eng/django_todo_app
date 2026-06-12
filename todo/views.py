@@ -62,13 +62,20 @@ def delete_task(request, pk):
     return redirect('home')
 
 # for change Task logic
-def complete_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+def complete_task(request, pk):
+    task = get_object_or_404(Task, id=pk)
 
-    # လက်ရှိ completed ဖြစ်နေရင် မဖြစ်တော့ဘူး (false) ပြောင်းမယ်
-    # မဖြစ်သေးရင် ဖြစ်သွားပြီ (True) လို့ ပြောင်းပေးလိုက်တာ 
+    # Javascript Fetch က POST request နဲ့ လာခဲ့ရင်
+    if request.method == "POST":
+        task.completed = not task.completed # True ဖြစ်ရင် False ပြောင်း၊ False ဖြစ်ရင် True
+        task.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'is_completed': task.completed # Fronted က သိအောင် လက်ရှိ status ကို ထည့်ပေးလိုက်တာ
+        })
+    
+    # မူရင်း Browser လင့်ခ်အတိုင်း လာရင်လည်း အဟောင်းအတိုင်း အလုပ်လုပ်ပေးထားမယ်
     task.completed = not task.completed
-
     task.save()
-
     return redirect('home')
